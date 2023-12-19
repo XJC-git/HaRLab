@@ -1,12 +1,9 @@
-package com.xjc.harlab.model;
+package com.xjc.harlab.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -15,10 +12,18 @@ public class Devices implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Column(name = "name", nullable = true)
+    private String name;
+
     @Column(name = "user_id", nullable = false)
-    private BigDecimal userId;
+    private Integer userId;
 
     @Column(name = "uuid", nullable = false)
     private String uuid;
+
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
 }

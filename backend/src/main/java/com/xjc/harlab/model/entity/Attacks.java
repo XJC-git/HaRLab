@@ -1,13 +1,9 @@
-package com.xjc.harlab.model;
+package com.xjc.harlab.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -19,12 +15,16 @@ public class Attacks implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
-    private BigDecimal id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "time")
     private Date time;
 
     @Column(name = "location")
     private String location;
+
+    @Column(name = "user_id")
+    private Integer userId;
 
 }

@@ -37,7 +37,6 @@ public class ParticipantsController {
             devices.setUserId(participant.getId());
             devices.setUuid(addUserOrDeviceDTO.getUuid());
             devicesRepository.save(devices);
-            return Result.success("add success");
         }
         else{
             List<Devices> devices = devicesRepository.findByUserId(current.getId());
@@ -50,8 +49,8 @@ public class ParticipantsController {
             addTo.setUserId(current.getId());
             addTo.setUuid(addUserOrDeviceDTO.getUuid());
             devicesRepository.save(addTo);
-            return Result.success("add success");
         }
+        return Result.success("add success");
     }
 
 }

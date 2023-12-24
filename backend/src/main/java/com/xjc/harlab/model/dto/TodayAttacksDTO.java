@@ -6,8 +6,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 
 @Data
-public class AddAttackDTO {
-    private int user_id;
+public class TodayAttacksDTO {
     private BigInteger time;
-    private String location;
+    private int user_id;
 }

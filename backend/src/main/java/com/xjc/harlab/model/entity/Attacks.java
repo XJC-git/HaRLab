@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -19,7 +21,7 @@ public class Attacks implements Serializable {
     private Integer id;
 
     @Column(name = "time")
-    private Date time;
+    private BigInteger time;
 
     @Column(name = "location")
     private String location;

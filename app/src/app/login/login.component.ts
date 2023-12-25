@@ -4,11 +4,15 @@ import {HttpClient, HttpClientModule, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Response} from "../model/response";
 import {UserService} from "../user.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {MatIconModule} from "@angular/material/icon";
+import {FormsModule} from "@angular/forms";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule, MatIconModule, FormsModule, NgIf],
   template: `
     <div class="isolate h-full min-h-screen bg-white grid">
       <!--      BackGround-->
@@ -36,12 +40,16 @@ import {UserService} from "../user.service";
         <div class="mt-8 mb-2 text-zinc-500">
           Please participant in our project
         </div>
-        <div class="flex flex-row items-center w-56 rounded bg-zinc-300 transition hover:scale-110">
-          <input class="bg-transparent p-1 pl-2 pr-2 focus:outline-none" (keydown)="handleSubmit($event)" placeholder="Enter your user name">
-          <svg class="{{isLoading?'':'hidden'}} animate-spin -ml-1 mr-3 h-5 w-5 text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <div class="flex flex-row items-center justify-between w-56 rounded bg-zinc-300 transition-all hover:scale-110">
+          <input [(ngModel)]="input_username" class="flex grow bg-transparent p-1 pl-2 pr-2 focus:outline-none w-auto" (keydown)="handleSubmit($event)" placeholder="Enter your user name">
+<!--          <div class="flex">-->
+<!--            <mat-icon *ngIf="!isLoading" class="text-zinc-500 hover:text-zinc-900" (click)="submit(input_username)">arrow_forward</mat-icon>-->
+<!--          </div>-->
+          <svg class="{{isLoading?'h-5 w-5':'hidden'}} flex animate-spin text-zinc-500 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
+
         </div>
         <div class="{{showError?'':'hidden'}} text-red-500 text-center">{{errorMsg}}</div>
       </div>
@@ -53,36 +61,42 @@ import {UserService} from "../user.service";
 export class LoginComponent {
   constructor(private deviceUUIDService : DeviceUUIDService,
               private http: HttpClient,
-              private userService: UserService) {
+              private userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
 
   isLoading = false;
   showError = false;
   errorMsg = '';
+  input_username = ""
 
-
-  handleSubmit(event:any){
-    if (event.key === "Enter") {
-      if(!this.isLoading){
-        const curr_username = event.target.value
-        this.http.post<Response>((environment.apiUrl+"/participants"),{username:curr_username,uuid:this.deviceUUIDService.getDeviceId()})
-          .pipe()
-          .subscribe(data=> {
+  submit(username:string){
+    if(!this.isLoading){
+      this.isLoading = true;
+      const curr_username = username
+      this.http.post<Response>((environment.apiUrl+"/participants"),{username:curr_username,uuid:this.deviceUUIDService.getDeviceId()})
+        .pipe()
+        .subscribe(data=> {
             this.isLoading=false
             if(data.code==200||data.code==500){
               this.userService.storeUser(curr_username,data.data.toString())
               this.showError = false
-
+              this.router.navigate(['/'])
             }
             else{
               this.errorMsg = data.msg
               this.showError = true
             }
+            this.isLoading=false
           }
-          )
-      }
-      this.isLoading = true;
+        )
+    }
+  }
+  handleSubmit(event:any){
+    if (event.key === "Enter") {
+      this.submit(event.target.value)
     }
   }
 }

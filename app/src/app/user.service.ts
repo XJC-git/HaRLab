@@ -19,5 +19,11 @@ export class UserService {
   getUserId(){
     return localStorage.getItem("userId");
   }
+
+  logOut(){
+    localStorage.setItem("username","");
+    localStorage.setItem("userId","");
+
+  }
   constructor() { }
 }

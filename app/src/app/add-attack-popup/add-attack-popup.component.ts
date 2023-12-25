@@ -12,6 +12,7 @@ import {Response} from "../model/response";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {UserService} from "../user.service";
+import {TimeService} from "../time.service";
 
 @Component({
   selector: 'app-add-attack-popup',
@@ -81,12 +82,13 @@ import {UserService} from "../user.service";
   styleUrl: './add-attack-popup.component.css'
 })
 export class AddAttackPopupComponent {
-  location: Date | undefined;
-  date: string | undefined;
-  time: string | undefined;
+  location: string = "";
+  date: Date = new Date();
+  time: string = "";
   constructor(public dialogRef: MatDialogRef<AddAttackPopupComponent>,
               private http: HttpClient,
-              private userService: UserService) {
+              private userService: UserService,
+              private timeService:TimeService) {
   }
   selectedTime = ''
   choices = [{value:'inside'},{value:'outside'}]
@@ -99,14 +101,10 @@ export class AddAttackPopupComponent {
   showError = false
   errorMsg = ''
   onSubmit(){
-    // @ts-ignore
-    let parseList = this.date.toLocaleDateString().split('/')
-    let parseDate = parseList[2]+'-'+parseList[0]+'-'+parseList[1]+'T'+this.time
-    // @ts-ignore
-    const timestamp = Date.parse(parseDate)
+
     this.http.post<Response>((environment.apiUrl+"/participants/addAttack"),
       {user_id:this.userService.getUserId(),
-        time:timestamp,
+        time:this.timeService.parseToTimeStamp(this.date,this.time),
         location:this.location
       })
       .pipe()

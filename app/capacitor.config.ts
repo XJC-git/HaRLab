@@ -5,6 +5,7 @@ const config: CapacitorConfig = {
   appName: 'app',
   webDir: 'dist/app',
   server: {
+    hostname:"alas.xerotech.cloud",
     androidScheme: 'https'
   },
   plugins: {

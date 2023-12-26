@@ -200,6 +200,7 @@ export class HomeComponent implements OnInit{
               }
           )
 
+      this.currentPage = 0;
       this.loadParticipantAttacks();
   }
 

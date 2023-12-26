@@ -12,6 +12,8 @@ import { TimeService } from '../time.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import {EChartsOption} from "echarts";
 import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
+import {DeleteAttackPopupComponent} from "../delete-attack-popup/delete-attack-popup.component";
+import {EditAttackPopupComponent, EditData} from "../edit-attack-popup/edit-attack-popup.component";
 
 @Component({
   selector: 'app-home',
@@ -65,8 +67,8 @@ import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
           <div class="flex">{{timeService.parseTimeStamp(data.time).time}}</div>
           <div class="flex grow">{{data.location}}</div>
           <div class="flex gap-2">
-            <button class="rounded-lg bg-purple-500 text-white h-8 pl-2 pr-2 hover:bg-purple-800">Edit</button>
-            <button class="rounded-lg bg-red-500 text-white h-8 pl-2 pr-2 hover:bg-red-800">Delete</button>
+            <button (click)="openEditPopup(data.id,data.location,data.time)" class="rounded-lg bg-purple-500 text-white h-8 pl-2 pr-2 hover:bg-purple-800">Edit</button>
+            <button (click)="openDeletePopup(data.id)" class="rounded-lg bg-red-500 text-white h-8 pl-2 pr-2 hover:bg-red-800">Delete</button>
           </div>
         </div>
       </div>
@@ -107,6 +109,22 @@ export class HomeComponent implements OnInit{
     const dialogRef = this.dialog.open(AddAttackPopupComponent);
     dialogRef.afterClosed().subscribe(()=>this.loadData())
   }
+
+  openDeletePopup(id:number){
+    const dialogRef = this.dialog.open(DeleteAttackPopupComponent,{data:{id:id}});
+    dialogRef.afterClosed().subscribe(()=>this.loadData())
+  }
+
+  openEditPopup(id:number,location:string,time:number){
+    let editData:EditData={id:id,
+        location:location,
+        date:new Date(time),
+        time:this.timeService.parseTimeStamp(time).time}
+    const dialogRef = this.dialog.open(EditAttackPopupComponent,{data:editData});
+    dialogRef.afterClosed().subscribe(()=>this.loadData())
+  }
+
+
 
   loadData(){
     const current = new Date();

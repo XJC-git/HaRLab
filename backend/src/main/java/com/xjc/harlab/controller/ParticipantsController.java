@@ -1,9 +1,6 @@
 package com.xjc.harlab.controller;
 
-import com.xjc.harlab.model.dto.AddAttackDTO;
-import com.xjc.harlab.model.dto.AddUserOrDeviceDTO;
-import com.xjc.harlab.model.dto.DeleteAttackDTO;
-import com.xjc.harlab.model.dto.TodayAttacksDTO;
+import com.xjc.harlab.model.dto.*;
 import com.xjc.harlab.model.entity.Attacks;
 import com.xjc.harlab.model.entity.Devices;
 import com.xjc.harlab.model.entity.Participants;
@@ -90,6 +87,20 @@ public class ParticipantsController {
         Optional<Attacks> target = attacksRepository.findById(deleteAttackDTO.getId());
         target.ifPresent(attacks -> attacksRepository.delete(attacks));
         return Result.success("delete success");
+    }
+
+    @PostMapping("/editAttack")
+    public Result<String> addAttack(@RequestBody EditAttackDTO editAttackDTO){
+        Attacks attack = attacksRepository.getReferenceById(editAttackDTO.getId());
+        attack.setId(editAttackDTO.getId());
+        attack.setTime(editAttackDTO.getTime());
+        attack.setLocation(editAttackDTO.getLocation());
+        try {
+            attacksRepository.save(attack);
+        } catch (Exception e) {
+            Result.paramError("invalid param");
+        }
+        return Result.success("add success");
     }
 
     @PostMapping("/todayAttacks")

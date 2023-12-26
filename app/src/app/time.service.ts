@@ -28,4 +28,10 @@ export class TimeService {
     let parseDate = parseList[2]+'-'+parseList[0]+'-'+parseList[1]+'T'+time
     return Date.parse(parseDate);
   }
+
+    public parseToTimeStampWithString(date:string,time:string){
+        let parseList = date.split('/')
+        let parseDate = parseList[2]+'-'+parseList[0]+'-'+parseList[1]+'T'+time
+        return Date.parse(parseDate);
+    }
 }

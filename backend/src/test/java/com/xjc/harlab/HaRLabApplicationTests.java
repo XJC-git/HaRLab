@@ -5,6 +5,7 @@ import com.xjc.harlab.model.entity.Participants;
 import com.xjc.harlab.repository.AttacksRepository;
 import com.xjc.harlab.repository.ParticipantsRepository;
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -25,6 +26,7 @@ class HaRLabApplicationTests {
     void contextLoads() {
     }
 
+    @Disabled
     @Test
     void dataGenerate(){
         List<Participants> allParticipants = participantsRepository.findAll();

@@ -8,8 +8,12 @@ import com.xjc.harlab.repository.AttacksRepository;
 import com.xjc.harlab.repository.DevicesRepository;
 import com.xjc.harlab.repository.ParticipantsRepository;
 import com.xjc.harlab.response.Result;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +27,11 @@ import java.util.*;
 @RequestMapping("/participants")
 public class ParticipantsController {
 
-    @Autowired
+    @Resource
     ParticipantsRepository participantsRepository;
-    @Autowired
+    @Resource
     DevicesRepository devicesRepository;
-    @Autowired
+    @Resource
     AttacksRepository attacksRepository;
 
     @PostMapping()
@@ -137,6 +141,12 @@ public class ParticipantsController {
         result.put("date",date);
         result.put("count",count);
         return Result.success(result,"query success");
+    }
+
+    @PostMapping("/allAttacks")
+    public Result allAttacks(@RequestBody AllAttacksDTO allAttacksDTO){
+        Pageable paging = PageRequest.of(allAttacksDTO.getPage(),allAttacksDTO.getSize(),Sort.Direction.DESC,"time");
+        return Result.success(attacksRepository.findAllByUserId(paging,allAttacksDTO.getUserId()),"query success");
     }
 
 

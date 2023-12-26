@@ -217,7 +217,6 @@ export class HomeComponent implements OnInit{
                       // @ts-ignore
                       this.totalPage = data.data.totalPages;
                       this.recordsCount = data.data.totalElements;
-                      this.loadParticipantData()
                   }
               }
           )
